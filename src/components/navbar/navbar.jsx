@@ -8,7 +8,7 @@ import { HiEllipsisVertical, HiUserGroup, HiUsers } from 'react-icons/hi2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { Avatar } from '@mui/material';
-import './Navbar.scss';
+import './navbar.scss';
 
 function Navbar() {
   const token = localStorage.getItem('token');
