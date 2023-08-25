@@ -10,7 +10,7 @@ import "./painel.styles.scss";
 function Painel() {
 
   const token = localStorage.getItem("token")
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = "https://vydra-back.onrender.com";
 
   const [teamFigures, setTeamFigures] = useState([]);
   const [companyFigures, setCompanyFigures] = useState([]);

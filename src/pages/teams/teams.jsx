@@ -16,7 +16,7 @@ const columns = [
 function Teams() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token")
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = "https://vydra-back.onrender.com";
   const endpoint = `${BASE_URL}/page_teams`;
   const [searchValue, setSearchValue] = useState("");
   const [teams, setTeams] = useState([]);

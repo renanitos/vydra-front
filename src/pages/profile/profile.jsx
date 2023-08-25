@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/navbar.jsx";
 import "./profile.styles.scss";
 
 function Profile() {
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = "https://vydra-back.onrender.com";
   const token = localStorage.getItem("token")
   const employeeId = localStorage.getItem("employee_id")
   const email = localStorage.getItem("email")

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import Navbar from '../../components/navbar/navbar';
 import Node from './node.jsx';
 import './organograma.styles.scss';
-import Navbar from '../../components/navbar/navbar';
-import TeamDialog from './teamDialog.jsx'; 
+import TeamDialog from './teamDialog.jsx';
 
 const Organograma = () => {
   const token = localStorage.getItem('token');
-  const BASE_URL = 'http://127.0.0.1:5000';
+  const BASE_URL = 'https://vydra-back.onrender.com';
   const endpoint = `${BASE_URL}/teams`;
 
   const [teams, setTeams] = useState([]);

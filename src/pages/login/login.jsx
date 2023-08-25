@@ -7,7 +7,7 @@ import "./login.styles.scss";
 
 function Login() {
   const navigate = useNavigate();
-  const BASE_URL = 'http://127.0.0.1:5000';
+  const BASE_URL = 'https://vydra-back.onrender.com';
   const endpoint = `${BASE_URL}/login`
 
   const [credentials, setCredentials] = useState({
