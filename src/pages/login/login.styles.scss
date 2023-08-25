@@ -1,0 +1,131 @@
+@import '../../assets/scss/variables';
+
+body {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+
+  .login {
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      > {
+        span.default-name {}
+
+        h1 {
+          color: #5A81FA;
+          font-size: 22px;
+          font-weight: 600;
+        }
+
+        p {
+          font-size: 14px
+        }
+
+        form {
+          $borderRadiusSize: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          margin-top: 15px;
+
+          >.control {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            >label {
+              font-weight: 800;
+              font-size: 14px;
+            }
+
+            >input {
+              border: 1px solid #80899A;
+              border-radius: $borderRadiusSize;
+              padding: 8px $borderRadiusSize;
+            }
+          }
+
+          span.forgotten-password {
+            font-size: 12px;
+            text-align: right;
+
+            >a {
+              color: $DSColorBLueSecundary2;
+              text-decoration: none;
+            }
+          }
+
+          button.btn-submit {
+            border-radius: $borderRadiusSize;
+            background-color: #464BA8;
+            color: #fff;
+            cursor: pointer;
+            padding: 8px 10px;
+            width: 100%;
+            transition: filter .3s;
+
+            &:hover {
+              filter: brightness(80%);
+            }
+          }
+        }
+      }
+    }
+
+    &__banner {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: #{$desktop-width}) {
+  body {
+    display: inline-block;
+
+    .login {
+      flex-direction: row;
+      margin: 0;
+      justify-content: space-between;
+      height: 100vh;
+
+      &__form {
+        justify-content: center;
+        margin: 0 auto;
+        width: 300px;
+
+        > {
+          span.default-name {
+            font-size: 28px
+          }
+
+          h1 {
+            color: #5A81FA;
+            font-size: 28px;
+            font-weight: 600;
+          }
+
+          p {
+            font-size: 16px
+          }
+        }
+      }
+
+      &__banner {
+        display: block;
+        max-width: 645px;
+
+        >img {
+          height: 100vh;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

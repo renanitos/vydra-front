@@ -1,0 +1,40 @@
+@import '../../assets/scss/variables';
+
+.teams {
+  .h2-teams {
+    padding: 20px;
+    margin-left: 70px;
+    color: #1F1F1F;
+    font-weight: 600;
+    font-size: 25px;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    margin-left: 70px;
+
+    .MuiAutocomplete-root {
+      width: 40%;
+      margin-right: 10px;
+    }
+
+    .new-team-button {
+      margin-right: 70px;
+    }
+
+    .MuiButton-containedPrimary {
+      color: white;
+    }
+  }
+
+  .table-container {
+    padding: 20px;
+    margin: 0 70px;
+    display: flex;
+    justify-content: center;
+  }
+}
+

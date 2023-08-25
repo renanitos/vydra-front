@@ -1,0 +1,16 @@
+.team-members-list {
+    margin-top: 10px;
+    list-style: none;
+  
+    li {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+  
+      .avatar {
+        width: 34px;
+        height: 34px;
+        margin-right: 10px;
+      }
+    }
+  }

@@ -1,0 +1,201 @@
+.painel {
+  background-color: #F8F9FD;
+}
+
+.userName {
+  color: #1F1F1F;
+  font-weight: 600;
+  margin-left: 70px;
+  margin-top: 20px;
+}
+
+.userWelcome {
+  color: #A8B1CE;
+  font-weight: 400;
+  margin-left: 75px;
+}
+
+.okrCompany-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 90%;
+  margin-left: 70px;
+  padding: 20px;
+  background-color: transparent;
+}
+
+.okrCompany-header {
+  margin-bottom: 10px;
+}
+
+.okrCompany-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.okrCompany-content {
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 50%;
+}
+
+.okrCompany-progress {
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+} 
+
+.okrCompany-progress-text {
+  margin-top: 10px;
+}
+
+.okrCompany-objectives {
+  background-color: #CEDEFF;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 25%;
+  margin-left: 20px;
+}
+
+.okrCompany-objectives-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #135EF2;
+  text-align: center;
+}
+
+.okrCompany-results-text {
+  margin-bottom: 10px;
+  color: #135EF2;
+  font-weight: 600;
+}
+
+.okrCompany-results-value {
+  font-size: 24px;
+  color: #135EF2;
+  font-weight: 600;
+  text-align: center;
+  
+}
+
+.okrAreasList-container{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 55%;
+  margin-left: 70px;
+  padding: 20px;
+  background-color: transparent;
+}
+
+.okrTeamsList-container{
+  padding: 20px;
+}
+
+.okrAreasList-box {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 20;
+}
+
+.okrTeamsList-content {
+  flex-direction: column;
+}
+
+.okrAreasList-content, .okrTeamsList-content{
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.okrAreasList-content {}
+
+.okrAreasList-progress {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  max-height: 300px ;
+  >ul {
+    height: 300px !important;
+  }
+} 
+
+.classList{
+  width: 100%;
+  padding-right: 20px;
+  height: min-content !important;
+}
+
+.classListData{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+  height: 40px !important;
+
+}
+
+.align {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 !important;
+
+}
+
+.vertical-align{
+  display: flex;
+  align-items: center;
+  &:not(:last-child){
+    border-bottom: 1px solid #A8B1CE;
+  }
+  padding: 16px 0 22px 0 !important;
+}
+
+
+.okrList-container{
+  display: flex;
+  width: 100%;
+}
+
+
+.okrCircular {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.okrList-Figures {
+  margin-top: 10px;
+  text-align: center;
+}

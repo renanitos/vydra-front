@@ -1,0 +1,70 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  background-color: transparent;
+  color: #fff;
+}
+
+.navbar-name {
+  color: var(--DsColorBlueSecundary);
+  line-height: 24px;
+  font-size: 20px;
+  border-radius: 5px;
+  font-family: var(--DSFontFamilyMuseo);
+  font-weight: 400;
+  text-decoration: none;
+
+}
+
+.navbar-logo {
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #1C4D8C;
+  text-decoration: none;
+}
+
+.navbar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.navbar-link {
+  margin: 0 10px;
+  font-size: 18px;
+  font-weight: 400;
+  text-decoration: none;
+  color: #A8B1CE;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+
+.navbar-avatar {
+  background-color: var(--DSColorBLueSecundary2);
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.navbar-name.active,
+.navbar-link.active {
+  color: #1F1F1F;
+}
+
+:root {
+  --DSFontFamily: 'Nunito', sans-serif;
+  --DSFontFamilyMuseo: 'MuseoModerno', sans-serif;
+}
+
+:root {
+  --DsColorBlueSecundary: #1C4D8C;
+  --DsColorBLueSecundary2: #5A81FA;
+}

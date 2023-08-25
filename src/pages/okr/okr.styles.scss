@@ -1,0 +1,106 @@
+html {
+  background-color: #F8F9FD;
+}
+
+.title {
+  color: #1F1F1F;
+  font-weight: 600;
+  margin-left: 70px;
+  margin-top: 20px;
+  font-size: 25px;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.okr {
+  &__view {
+
+    .not-found-message {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      >span {
+        color: rgba(0, 0, 0, .6);
+      }
+    }
+
+    .create-okr {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0 10px;
+    }
+
+    header {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      margin: 40px 0 60px;
+    }
+
+    .avatar {
+      background-color: #5A81FA;
+    }
+
+    .secondary-text {
+      color: rgba(0, 0, 0, .6);
+    }
+
+    .pencil-button {
+      text-align: right;
+    }
+
+    .buttons {
+      display: inline-flex;
+    }
+  }
+
+  &__view>header,
+  &__list {
+    margin: 0 75px;
+    padding: 20px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 20px;
+
+    button,
+    a {
+      >span {
+        >svg {
+          fill: #fff !important;
+        }
+      }
+    }
+  }
+
+  &__list {
+    &--empty {
+      text-align: center;
+      width: 100%;
+    }
+
+    .accordion-details {
+      padding: 0 20px;
+
+      &--empty {
+        padding: 40px 20px;
+      }
+
+      ul {
+        list-style-type: none;
+      }
+    }
+
+    .css-sh22l5-MuiButtonBase-root-MuiAccordionSummary-root.Mui-expanded {
+      border-bottom: 1px solid #ededed;
+    }
+  }
+}

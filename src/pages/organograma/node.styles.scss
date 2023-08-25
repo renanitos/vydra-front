@@ -1,0 +1,34 @@
+.node {
+  .team-members {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+
+    .MuiAvatar-root {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .children {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+  
+
+  .team-name {
+    font-size: 20px;
+  }
+
+  .arrow {
+    margin-left: 15px;
+  }
+}

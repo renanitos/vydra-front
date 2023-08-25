@@ -1,0 +1,42 @@
+.profile {
+    background-color: #F8F9FD;
+
+    .profile-container {
+        background-color: #fff;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        justify-content: center;
+        flex-basis: 50%;
+        height: 50%;
+        width: 20%;
+        margin-top: 50px;
+        margin-left: 35%;
+    
+        .profile-header {
+        font-size: 24px;
+        margin-bottom: 20px;
+        }
+    
+        .profile-details {
+        display: flex;
+        justify-content: space-between;
+    
+        div {
+            flex: 1;
+    
+            p {
+            color: #1F1F1F;
+            margin-bottom: 10px;
+            }
+    
+            strong {
+            font-weight: bold;
+        }
+      }
+    }
+  }
+}
