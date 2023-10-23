@@ -1,13 +1,13 @@
-import { Button, Dialog, DialogActions, DialogTitle, Menu, MenuItem } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Tooltip from '@mui/material/Tooltip';
 import React, { useEffect, useState } from 'react';
 import { HiLogout } from "react-icons/hi";
 import { HiEllipsisVertical, HiUserGroup, HiUsers } from 'react-icons/hi2';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import { Avatar } from '@mui/material';
+import { Avatar, Button, Dialog, DialogActions, DialogTitle, Menu, MenuItem } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Tooltip from '@mui/material/Tooltip';
+
 import './navbar.scss';
 
 function Navbar() {
@@ -27,15 +27,18 @@ function Navbar() {
   }
 
   const handleConfigClick = (event) => setAnchorEl2(event.currentTarget);
+
   const handleLogoutClick = (event) => {
-    setOpenLogout(true)
+    setOpenLogout(true);
+    handleClose2(); 
   }
+
   const handleClose2 = () => setAnchorEl2(null);
 
   const handleLogout = (event) => {
     event.preventDefault();
     if (token) {
-      localStorage.removeItem('token');
+      setOpenLogout(true);
     }
   }
 
@@ -70,6 +73,9 @@ function Navbar() {
         </Link>
         <Link to="/organograma" className={`navbar-link ${isActiveLink('/organograma') ? 'active' : ''}`}>
           Organograma
+        </Link>
+        <Link to={`/teams/${teamId}/analytics`} className={`navbar-link ${isActiveLink(`/teams/${teamId}/analytics`) ? 'active' : ''}`}>
+          Analytics
         </Link>
       </div>
       <div className="navbar-right">
@@ -132,6 +138,12 @@ function Navbar() {
               </ListItemIcon>
               Funcionários
             </MenuItem>
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <HiLogout />
+              </ListItemIcon>
+              Sair
+            </MenuItem>
           </Menu>
         </div>
         <div className="navbar-icon">
@@ -145,26 +157,14 @@ function Navbar() {
             </IconButton>
           </Tooltip>
         </div>
-        <div className="navbar-icon">
-          <Tooltip title="Logout">
-            <IconButton
-              onClick={handleLogoutClick}
-              size="small"
-              sx={{ ml: 2 }}
-              Tooltip="Logout"
-            >
-              <HiLogout/>
-            </IconButton>
-          </Tooltip>
-          <Dialog open={openLogout}>
-            <DialogTitle>Você realmente deseja sair?</DialogTitle>
-            <DialogActions>
-              <Button onClick={handleLogoutDialogCloseCancel}>Cancelar</Button>
-              <Button onClick={handleLogout}><Link to="/" className="navbar-link">Sair</Link></Button>
-            </DialogActions>
-          </Dialog>
-        </div>
       </div>
+      <Dialog open={openLogout}>
+        <DialogTitle>Você realmente deseja sair?</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleLogoutDialogCloseCancel}>Cancelar</Button>
+          <Button onClick={handleLogout}><Link to="/" className="navbar-link">Sair</Link></Button>
+        </DialogActions>
+      </Dialog>
     </nav>
   );
 }

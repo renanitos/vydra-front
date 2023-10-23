@@ -4,6 +4,7 @@ import Employees from "./pages/employees/employees.jsx";
 import Login from "./pages/login/login.jsx";
 import Okr from "./pages/okr/okr.jsx";
 import Organograma from "./pages/organograma/organograma.jsx";
+import Analytics from "./pages/analytics/analytics.jsx";
 import Painel from "./pages/painel/painel.jsx";
 import Profile from "./pages/profile/profile.jsx";
 import Teams from "./pages/teams/teams.jsx";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/teams" element={<Teams />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/organograma" element={<Organograma />} />
+        <Route path="/teams/:team_id/analytics" element={<Analytics />} />
       </Routes>
     </Router>
   );

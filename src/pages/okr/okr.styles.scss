@@ -58,6 +58,11 @@ html {
 
     .buttons {
       display: inline-flex;
+
+      button,
+        svg {
+        fill: #fff !important; 
+      }
     }
   }
 
@@ -71,6 +76,11 @@ html {
     display: flex;
     gap: 20px;
 
+    button {
+      .css-qplaq6-MuiButtonBase-root-MuiButton-root {
+      border-radius: 8;
+    }
+  }
     button,
     a {
       >span {
