@@ -3,10 +3,12 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Avatar from '@mui/material/Avatar';
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { HiChevronDown, HiEye, HiOutlineCog6Tooth, HiPlus, HiTrash } from "react-icons/hi2";
+import { HiChevronDown, HiEye, HiPlus, HiTrash, HiPencilSquare } from "react-icons/hi2";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Navbar from "../../components/navbar/navbar.jsx";
 import "./okr.styles.scss";
+import CreateTheme from "../../components/colors.jsx";
+import { ThemeProvider } from '@mui/material/styles';
 
 function Okr() {
   const token = localStorage.getItem('token');
@@ -42,7 +44,7 @@ function Okr() {
     percentage: 0
   };
   const [formData, setFormData] = useState({ ...options });
-  const [formDataKr, setFormDataKr] = useState({ ...optionsKr });
+  const [formDataKr, setFormDataKr] = useState({ ...optionsKr, responsable: "" });
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -121,11 +123,11 @@ function Okr() {
     setFormDataKr(optionsKr)
   } 
   const handleDialogKrEditOpen = (kr) => {
-    kr.prevision_date_formated = formatDate(kr.prevision_date)
-    setFormDataKr(kr)
-    setOpenDialogKr(true)
-    setStatusDialogKr("Editar")
-  }
+    kr.prevision_date_formated = formatDate(kr.prevision_date);
+    setFormDataKr({ ...kr, responsable: kr.responsable_id });
+    setOpenDialogKr(true);
+    setStatusDialogKr("Editar");
+  };
   const handleStorageEvent = async (event) => {
     const keysToWatch = ['token'];
     if (keysToWatch.includes(event.key)) {
@@ -444,8 +446,10 @@ function Okr() {
               inputProps={{ 'aria-label': 'controlled' }}
             />
           </p>
+          <ThemeProvider theme={CreateTheme}>
           <Button size="small" variant="contained" onClick={handleDialogObjectiveOpen} startIcon={<HiPlus />}> Objetivo</Button>
           <Button component={Link} to="/teams" variant="contained" startIcon={<HiEye />}>Ver Times</Button>
+          </ThemeProvider>
         </div>
       </header>
       <section className={`okr__list${!displayObjectives.length ? '--empty' : ''}`}>
@@ -462,8 +466,10 @@ function Okr() {
                   <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective.description}</Typography>
                   <Typography sx={{ width: '15%'}}>
                   <div className="buttons">
-                    <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective)}> <HiOutlineCog6Tooth /> </Button>
-                    <Button variant="contained" color="error" onClick={event => handleDeleteObjectiveDialog(objective)}> <HiTrash /> </Button>
+                  <ThemeProvider theme={CreateTheme}> 
+                    <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective)}> <HiPencilSquare /> </Button>
+                    <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective)}> <HiTrash /> </Button>
+                  </ThemeProvider>
                   </div>
                   </Typography>
                 </AccordionSummary>
@@ -488,9 +494,11 @@ function Okr() {
                                         <li className="secondary-text">Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</li>
                                       </TableCell>
                                       <TableCell className="pencil-button" size="medium">
-                                      <div >
-                                        <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiOutlineCog6Tooth /> </Button>
-                                        <Button variant="contained" color="error" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                      <div className="buttons">
+                                        <ThemeProvider theme={CreateTheme}> 
+                                          <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
+                                          <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                        </ThemeProvider>
                                       </div>
                                       </TableCell>
                                     </TableRow>
@@ -502,7 +510,9 @@ function Okr() {
                           </TableContainer>
                     }
                     <li className="create-okr">
-                      <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective.id)}>Cadastrar Key Result</Button>
+                      <ThemeProvider theme={CreateTheme}>
+                        <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective.id)}>Cadastrar Key Result</Button>
+                      </ThemeProvider>
                     </li>
                   </ul>
                 </AccordionDetails>
@@ -608,12 +618,11 @@ function Okr() {
               disabled={loading}
             />
             <Autocomplete
-              onChange={(event, newValue) => setFormDataKr({...formDataKr, responsable: newValue.id})}
+              onChange={(event, newValue) => setFormDataKr({ ...formDataKr, responsable: newValue?.id || null })}
+              value={employees.find((employee) => employee.id === formDataKr.responsable) || null} 
               options={employees}
-              getOptionLabel={(option) => option.first_name }
-              renderInput={(params) => (
-              <TextField {...params} label="Responsável" />
-                )}
+              getOptionLabel={(option) => option.first_name}
+              renderInput={(params) => <TextField {...params} label="Responsável*" />}
             />
             <TextField
               autoFocus
