@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import jwtDecode from 'jwt-decode';
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
 import "./login.styles.scss";
 
@@ -9,6 +9,7 @@ function Login() {
   const navigate = useNavigate();
   const BASE_URL = 'https://vydra-back.onrender.com';
   const endpoint = `${BASE_URL}/login`
+  const [error, setError] = useState ('');
 
   const [credentials, setCredentials] = useState({
     email: '',
@@ -46,11 +47,11 @@ function Login() {
       localStorage.setItem("team_id", data.team_id);
       console.log('user =>', jwtDecode(data.token));
       navigate('/painel');
+    } catch (error) {
+      console.error(error);
+      setError("Sua conta ou senha está incorreta.");
     }
-    catch (error) {
-      console.error(error)
-    }
-  }
+  };
 
   return (
     <section className='login'>
@@ -70,6 +71,10 @@ function Login() {
               value={credentials.password} onChange={handleChange}
             />
           </div>
+          <span className="error-message">{error}</span>
+          <span className='forgotten-password'>
+            <Link to='#'>Esqueceu a senha?</Link>
+          </span>
           <Button className='btn-submit' onClick={loginRequest}>Entrar</Button>
         </form>
       </div>
