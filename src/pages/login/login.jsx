@@ -7,9 +7,10 @@ import "./login.styles.scss";
 
 function Login() {
   const navigate = useNavigate();
-  const BASE_URL = 'https://vydra-back.onrender.com';
+  const BASE_URL = "https://vydra-back.onrender.com";
   const endpoint = `${BASE_URL}/login`
   const [error, setError] = useState ('');
+  const helpMessage = "Caso esteja com problemas para efetuar o login tente alterar sua senha. Caso ainda enfrente esse e outros problemas entre em contato com nosso suporte no email ";
 
   const [credentials, setCredentials] = useState({
     email: '',
@@ -53,6 +54,13 @@ function Login() {
     }
   };
 
+  const [showHelpDiv, setShowHelpDiv] = useState(false);
+ 
+  const toggleHelpDiv = () => {
+    setShowHelpDiv(!showHelpDiv);
+  };
+  
+
   return (
     <section className='login'>
       <div className='login__form'>
@@ -78,6 +86,12 @@ function Login() {
           <Button className='btn-submit' onClick={loginRequest}>Entrar</Button>
         </form>
       </div>
+      <div className={`help-div ${showHelpDiv ? 'visible' : ''}`}>
+        <p className='text-help'>{helpMessage} <a className='email' href='mailto:vydra@gestão.com.br?subject=Problemas com&body=Estou enfrentando problemas com '>vydra@gestao.com.br</a>.</p>
+        <Link to={'#'} className='btn-back' onClick={toggleHelpDiv}>VOLTAR</Link>
+      </div>
+      <div className={`overlay ${showHelpDiv ? 'visible' : ''}`}></div>
+      <div className='help-btn'><Link to='#' onClick={toggleHelpDiv}>?</Link></div>
       <div className='login__banner'>
         <img src={logo} alt='LOGO' />
       </div>
