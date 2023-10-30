@@ -1,0 +1,128 @@
+
+.climate {
+  background-color: #F8F9FD;
+}
+
+.climateText {
+    color: #1F1F1F;
+    font-weight: 400;
+    align-self: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  .climateInvitation {
+    color: #A8B1CE;
+    font-weight: 400;
+    justify-content: center;
+    display: flex;
+    margin-top: 50px;
+  }
+
+  .container {
+    justify-content: center;
+    align-items: center;
+    }
+
+  .box {
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+    flex-basis: 50%;
+    height: 50%;
+    width: 20%;
+    margin-top: 50px;
+    margin-left: 35%;
+    }
+
+    .questionBox {
+      display: flex; 
+      justify-content: center;
+      align-self: center;
+      margin-top: 100px;
+      height: 50%;
+      flex-direction: column;
+    }
+    
+    .answerButtons {
+      display: flex;
+      justify-content: space-between; 
+    
+      .MuiButton-root {
+        background-color: #FFFFFF;
+        color: #1F1F1F;
+        border: 1px solid #1F1F1F;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        flex: 1;
+        margin: 0 5px;
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .MuiButton-root:nth-child(1) {
+      margin-left: 75px; 
+    }
+    
+    .MuiButton-root:nth-child(7) {
+      margin-right: 75px; 
+    }
+
+    .auxiliaryValues {
+      display: flex;
+      flex-direction: row;
+      margin-top: 20px;
+      justify-content: space-between; 
+    }
+    
+    .maxValue {
+      margin-right: 35px; 
+      color: #A8B1CE;
+    }
+    
+    .minValue {
+      margin-left: 35px; 
+      color: #A8B1CE;
+    }
+
+    .questionButtons {
+      display: flex;
+      flex-direction: row;
+      margin-top: 30px;
+      justify-content: center;
+    }
+    
+    .questionButtons .btn-previousQuestion {
+      margin-right: 40px;
+    }
+
+    .thankYouContainer{
+      justify-content: center;
+      align-items: center;
+    }
+    .thankYouMessage{
+      background-color: #fff;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      justify-content: center;
+      flex-basis: 50%;
+      height: 60%;
+      width: 25%;
+      margin-top: 50px;
+      margin-left: 35%;
+    }
+
+    .thankYouText{
+      margin-bottom: 20px;
+    }

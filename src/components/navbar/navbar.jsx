@@ -21,6 +21,7 @@ function Navbar() {
 
   const [firstName, setFirstName] = useState('');
   const [teamId, setTeamId] = useState('');
+  const [employeeId, setEmployeeId] = useState('');
 
   const handleProfileClick = (event) => {
     navigate("/profile")
@@ -45,8 +46,10 @@ function Navbar() {
   useEffect(() => {
     const firstName = localStorage.getItem("first_name");
     const teamId = localStorage.getItem("team_id");
+    const employeeId = localStorage.getItem("employee_id");
     setFirstName(firstName);
     setTeamId(teamId);
+    setEmployeeId(employeeId);
   }, []);
 
   const handleLogoutDialogCloseCancel = () => {
@@ -69,13 +72,16 @@ function Navbar() {
           Painel
         </Link>
         <Link to={`/teams/${teamId}/okr`} className={`navbar-link ${isActiveLink(`/teams/${teamId}/okr`) ? 'active' : ''}`}>
-          OKR
+          OKRs
         </Link>
         <Link to="/organograma" className={`navbar-link ${isActiveLink('/organograma') ? 'active' : ''}`}>
           Organograma
         </Link>
         <Link to={`/teams/${teamId}/analytics`} className={`navbar-link ${isActiveLink(`/teams/${teamId}/analytics`) ? 'active' : ''}`}>
           Analytics
+        </Link>
+        <Link to={`/profile/${employeeId}/climate`} className={`navbar-link ${isActiveLink(`/profile/${employeeId}/climate`) ? 'active' : ''}`}>
+          Ondas
         </Link>
       </div>
       <div className="navbar-right">
