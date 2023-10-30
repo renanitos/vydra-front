@@ -6,7 +6,6 @@ import { Button } from "@mui/material"
 import "./climate.styles.scss";
 import CreateTheme from "../../components/colors.jsx";
 import { ThemeProvider } from '@mui/material/styles';
-import ondaImage from "../../assets/images/onda.png";
 
 
 function Climate() {
