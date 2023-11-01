@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import { ThemeProvider } from '@mui/material/styles';
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { HiChevronDown, HiEye, HiPencilSquare, HiPlus, HiTrash } from "react-icons/hi2";
+import { HiCheck, HiChevronDown, HiEye, HiOutlineStop, HiPencilSquare, HiPlus, HiTrash } from "react-icons/hi2";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import CreateTheme from "../../components/colors.jsx";
 import Navbar from "../../components/navbar/navbar.jsx";
@@ -583,108 +583,114 @@ function Okr() {
           displayObjectives.length <= 0 ?
             <span>Não existem objetivos a serem exibidos!</span>
             : displayObjectives.map((objective, index) => (
-              <Accordion key={index} expanded={expanded === `${objective[0].objective_name}-${objective[0].objective_id}`} onChange={handleAccordionChange(`${objective[0].objective_name}-${objective[0].objective_id}`)}>
-                <AccordionSummary
-                  expandIcon={<HiChevronDown />}
-                  id={`${objective[0].name}-${objective[0].id}`}
-                >
-                  <Typography sx={{ width: '30%', flexShrink: 0 }}>{objective[0].objective_name}</Typography>
-                  <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective[0].objective_description}</Typography>
-                  <Typography sx={{ width: '15%'}}>
-                  <div className="buttons">
-                  <ThemeProvider theme={CreateTheme}> 
-                    <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
-                    <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
-                  </ThemeProvider>
-                  </div>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails className={`accordion-details${!objective[0]?.key_results?.length || objective[0]?.key_results.length <= 0 ? '--empty' : ''}`}>
-                  <ul>
-                    {
-                      !objective[0]?.key_results?.length ?
-                        <li className="not-found-message">
-                          <span>Nenhum KR cadastrado para o objetivo selecionado!</span>
-                          
-                        </li>
-                        : 
-                          <TableContainer>
-                            <Table>
-                              <TableBody>
-                                {
-                                  objective[0].key_results.map((keyResult, index) => (
-                                    <Accordion key={keyResult.key_result_name} expanded={expandedTasks === `${keyResult.key_result_name}-${keyResult.key_result_id}`} onChange={handleAccordionTasksChange(`${keyResult.key_result_name}-${keyResult.key_result_id}`)}>
-                                      <AccordionSummary
-                                        expandIcon={<HiChevronDown />}
-                                        id={`${keyResult.key_result_name}-${keyResult.key_result_id}`}
-                                      >
-                                        <Typography sx={{ width: '20%', flexShrink: 0 }}>{<Avatar className="avatar">{`${keyResult.responsable_name.charAt(0).toUpperCase()}`}</Avatar>}</Typography>
-                                        <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
-                                        <Typography sx={{ width: '30%', color: 'text.secondary' }}>Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</Typography>
-                                        <Typography sx={{ width: '20%'}}>
-                                        <div className="buttons">
-                                        <ThemeProvider theme={CreateTheme}> 
-                                          <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
-                                          <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
-                                        </ThemeProvider>
-                                        </div>
-                                        </Typography>
-                                      </AccordionSummary>
-                                      <AccordionDetails className={`accordion-details${!keyResult?.tasks?.length || keyResult?.tasks.length <= 0 ? '--empty' : ''}`}>
-                                      {
-                                        !keyResult?.tasks ?
-                                          <li className="not-found-message">
-                                            <span>Nenhuma tarefa cadastrada para o resultado-chave selecionado!</span>
-                                            
+                <Accordion key={index} expanded={expanded === `${objective[0].objective_name}-${objective[0].objective_id}`} onChange={handleAccordionChange(`${objective[0].objective_name}-${objective[0].objective_id}`)}>
+                  <AccordionSummary
+                    expandIcon={<HiChevronDown />}
+                    id={`${objective[0].name}-${objective[0].id}`}
+                    >
+                    <Typography sx={{ width: '30%', flexShrink: 0 }}>{objective[0].objective_name}</Typography>
+                    <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective[0].objective_description}</Typography>
+                    <Typography sx={{ width: '15%'}}>
+                    <div className="buttons">
+                    <ThemeProvider theme={CreateTheme}> 
+                      <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
+                      <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
+                    </ThemeProvider>
+                    </div>
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails className={`accordion-details${!objective[0]?.key_results?.length || objective[0]?.key_results.length <= 0 ? '--empty' : ''}`}>
+                    <ul>
+                    <li className="titles">Resultados chave</li>
+                      {
+                        !objective[0]?.key_results?.length ?
+                          <li className="not-found-message">
+                            <span>Nenhum KR cadastrado para o objetivo selecionado!</span>
+                            
+                          </li>
+                          : 
+                            <TableContainer>
+                              <Table>
+                                <TableBody>
+                                  {
+                                    objective[0].key_results.map((keyResult, index) => (
+                                      <section className={`task__list${!objective[0].key_results.length ? '--empty' : ''}`}>
+                                        <Accordion key={keyResult.key_result_name} expanded={expandedTasks === `${keyResult.key_result_name}-${keyResult.key_result_id}`} onChange={handleAccordionTasksChange(`${keyResult.key_result_name}-${keyResult.key_result_id}`)}>
+                                          <AccordionSummary
+                                            expandIcon={<HiChevronDown />}
+                                            id={`${keyResult.key_result_name}-${keyResult.key_result_id}`}
+                                          >
+                                            <Typography sx={{ width: '20%', flexShrink: 0 }}>{<Avatar className="avatar">{`${keyResult.responsable_name.charAt(0).toUpperCase()}`}</Avatar>}</Typography>
+                                            <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
+                                            <Typography sx={{ width: '30%', color: 'text.secondary' }}>Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</Typography>
+                                            <Typography sx={{ width: '20%'}}>
+                                            <div className="buttons">
+                                            <ThemeProvider theme={CreateTheme}> 
+                                              <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
+                                              <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                            </ThemeProvider>
+                                            </div>
+                                            </Typography>
+                                          </AccordionSummary>
+                                          <AccordionDetails className={`accordion-details${!keyResult?.tasks?.length || keyResult?.tasks.length <= 0 ? '--empty' : ''}`}>
+                                            {
+                                              !keyResult?.tasks ?
+                                                <li className="not-found-message">
+                                                  <span>Nenhuma tarefa cadastrada para o resultado-chave selecionado!</span>
+                                                  
+                                                </li>
+                                                : 
+                                                  <TableContainer>
+                                                    <Table>
+                                                      <TableBody>
+                                                          <li className="titles">Tarefas</li>
+                                                          {
+                                                            keyResult.tasks.map((task, index) => (
+                                                                <TableRow key={task.task_name}>
+                                                                  <TableCell size="medium" align="left">
+                                                                    <li>{task.task_status ? <HiCheck /> : <HiOutlineStop />}  {task.task_name}</li>
+                                                                  </TableCell>
+                                                                  <TableCell size="medium" align="center">
+                                                                    <li className="secondary-text">Data prevista: {formatDateKr(task.task_prevision_date)}</li>
+                                                                  </TableCell>
+                                                                  <TableCell size="medium" align="center">
+                                                                    <div className="buttons">
+                                                                      <ThemeProvider theme={CreateTheme}> 
+                                                                        <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
+                                                                        <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
+                                                                      </ThemeProvider>
+                                                                    </div>
+                                                                  </TableCell>
+                                                                </TableRow>
+                                                              ))
+                                                            }
+                                                      </TableBody>
+                                                    </Table>
+                                                  </TableContainer>
+                                            }
+                                          <li className="create-okr">
+                                            <ThemeProvider theme={CreateTheme}>
+                                              <Button size="small" variant="contained" onClick={event => handleDialogTaskOpen(keyResult.key_result_id)}>Cadastrar Tarefa</Button>
+                                            </ThemeProvider>
                                           </li>
-                                          : 
-                                            <TableContainer>
-                                              <Table>
-                                                <TableBody>
-                                                  {
-                                                    keyResult.tasks.map((task, index) => (
-                                                      <TableRow key={task.task_name}>
-                                                        <TableCell size="medium" align="left">
-                                                          <li>{task.task_name}</li>
-                                                          <li className="secondary-text">Descrição: {task.task_description} - Data prevista: {formatDateKr(task.task_prevision_date)}</li>
-                                                        </TableCell>
-                                                        <TableCell className="pencil-button" size="medium">
-                                                        <div className="buttons">
-                                                          <ThemeProvider theme={CreateTheme}> 
-                                                            <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
-                                                            <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
-                                                          </ThemeProvider>
-                                                        </div>
-                                                        </TableCell>
-                                                      </TableRow>
-                                                    ))
-                                                  }
-                                                </TableBody>
-                                              </Table>
-                                            </TableContainer>
-                                      }
-                                      <li className="create-okr">
-                                        <ThemeProvider theme={CreateTheme}>
-                                          <Button size="small" variant="contained" onClick={event => handleDialogTaskOpen(keyResult.key_result_id)}>Cadastrar Tarefa</Button>
-                                        </ThemeProvider>
-                                      </li>
-                                      </AccordionDetails>
-                                    </Accordion>
-                                  ))
-                                }
+                                          </AccordionDetails>
+                                        </Accordion>
+                                      </section>
+                                    ))
+                                  }
 
-                              </TableBody>
-                            </Table>
-                          </TableContainer>
-                    }
-                    <li className="create-okr">
-                      <ThemeProvider theme={CreateTheme}>
-                        <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective[0].objective_id)}>Cadastrar Key Result</Button>
-                      </ThemeProvider>
-                    </li>
-                  </ul>
-                </AccordionDetails>
-              </Accordion>
+                                </TableBody>
+                              </Table>
+                            </TableContainer>
+                      }
+                      <li className="create-okr">
+                        <ThemeProvider theme={CreateTheme}>
+                          <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective[0].objective_id)}>Cadastrar Key Result</Button>
+                        </ThemeProvider>
+                      </li>
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
             ))
         }
       </section>
