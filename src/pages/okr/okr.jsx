@@ -1,21 +1,21 @@
 import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Switch, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Avatar from '@mui/material/Avatar';
+import { ThemeProvider } from '@mui/material/styles';
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { HiChevronDown, HiEye, HiPlus, HiTrash, HiPencilSquare } from "react-icons/hi2";
+import { HiChevronDown, HiEye, HiPencilSquare, HiPlus, HiTrash } from "react-icons/hi2";
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import CreateTheme from "../../components/colors.jsx";
 import Navbar from "../../components/navbar/navbar.jsx";
 import "./okr.styles.scss";
-import CreateTheme from "../../components/colors.jsx";
-import { ThemeProvider } from '@mui/material/styles';
 
 function Okr() {
   const token = localStorage.getItem('token');
   let { team_id: teamId } = useParams();
 
   const navigate = useNavigate();
-  const BASE_URL = "https://vydra-back.onrender.com";
+  const BASE_URL = "http://127.0.0.1:5000";
   const endpoint = `${BASE_URL}/objectives`;
   const endpointTeams = `${BASE_URL}/teams`;
   const headers = {
@@ -43,19 +43,38 @@ function Okr() {
     responsable: null,
     percentage: 0
   };
+  const optionsTask = {
+    task_name: '',
+    task_created_at: '',
+    task_description: '',
+    task_finished_at: '',
+    task_id: null,
+    task_prevision_date: '',
+    task_status: false,
+    name: '',
+    description: '',
+    prevision_date: '',
+    status: false
+  };
   const [formData, setFormData] = useState({ ...options });
   const [formDataKr, setFormDataKr] = useState({ ...optionsKr, responsable: "" });
+  const [formDataTask, setFormDataTask] = useState({ ...optionsTask});
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [expandedTasks, setExpandedTasks] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogKr, setOpenDialogKr] = useState(false);
+  const [openDialogTask, setOpenDialogTask] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [deleteDialogKr, setDeleteDialogKr] = useState(false);
+  const [deleteDialogTask, setDeleteDialogTask] = useState(false);
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [selectedKr, setSelectedKr] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
   const [statusDialog, setStatusDialog] = useState('Novo')
   const [statusDialogKr, setStatusDialogKr] = useState('Novo')
+  const [statusDialogTask, setStatusDialogTask] = useState('Novo')
   const [employees, setEmployees] = useState([])
   const [searchValue, setSearchValue] = useState("");
   const [teams, setTeams] = useState([]);
@@ -86,6 +105,13 @@ function Okr() {
       [name]: value
     }));
   };
+  const handleChangeTask = (event) => {
+    const { name, value } = event.target;
+    setFormDataTask((prevFormDataTask) => ({
+      ...prevFormDataTask,
+      [name]: value
+    }));
+  };
   const handleChangeCheckboxKr = (event) => {
     let percentage = 0
     if (event.target.checked) percentage = 100
@@ -94,7 +120,20 @@ function Okr() {
       ["percentage"]: percentage
     }));
   };
-  const handleAccordionChange = (panel) => (event, isExpanded) => setExpanded(isExpanded ? panel : false);
+  const handleChangeCheckboxTask = (event) => {
+    setFormDataTask((prevFormDataTask) => ({
+      ...prevFormDataTask,
+      ["status"]: event.target.checked
+    }));
+  };
+  const handleAccordionChange = (panel) => (event, isExpanded) => {
+    const verificationClick = event.target instanceof SVGSVGElement && event.target.querySelectorAll('path').length === 1 && isExpanded
+    setExpanded(verificationClick ? panel : false);
+  }
+  const handleAccordionTasksChange = (panel) => (event, isExpanded) => {
+    const verificationClick = event.target instanceof SVGSVGElement && event.target.querySelectorAll('path').length === 1 && isExpanded
+    setExpandedTasks(verificationClick ? panel : false);
+  } 
   const handleDialogObjectiveOpen = () => setOpenDialog(true);
   const handleDialogClose = () => {
     setStatusDialog("Novo")
@@ -106,8 +145,15 @@ function Okr() {
     setOpenDialogKr(false);
     setFormDataKr(options)
   } 
+  const handleDialogCloseTask = () => {
+    setStatusDialogTask("Novo")
+    setOpenDialogTask(false);
+    setFormDataTask(options)
+  } 
   const handleDialogObjectiveEditOpen = (objective) => {
     objective.prevision_date = formatDate(objective.prevision_date)
+    objective.name = objective.objective_name
+    objective.description = objective.objective_description
     setFormData(objective)
     setOpenDialog(true)
     setStatusDialog("Editar")
@@ -124,10 +170,18 @@ function Okr() {
   } 
   const handleDialogKrEditOpen = (kr) => {
     kr.prevision_date_formated = formatDate(kr.prevision_date);
+    kr.name = kr.key_result_name
+    kr.description = kr.key_result_description
     setFormDataKr({ ...kr, responsable: kr.responsable_id });
     setOpenDialogKr(true);
     setStatusDialogKr("Editar");
   };
+
+  const handleDialogTaskOpen = (keyResultId) => {
+    setOpenDialogTask(true);
+    setSelectedKr(keyResultId)
+  }
+
   const handleStorageEvent = async (event) => {
     const keysToWatch = ['token'];
     if (keysToWatch.includes(event.key)) {
@@ -138,16 +192,40 @@ function Okr() {
     }
   };
   const handleDeleteObjectiveDialog = (objective) => {
-    setSelectedObjective(objective.id)
+    setSelectedObjective(objective.objective_id)
     setDeleteDialog(true);
   }
 
   const handleDeleteKrDialog = (keyResult) => {
-    setSelectedKr(keyResult.id)
+    setSelectedKr(keyResult.key_result_id)
     setDeleteDialogKr(true);
+  }
+
+  const handleDeleteTaskDialog = (task) => {
+    setSelectedTask(task.task_id)
+    setDeleteDialogTask(true);
   }
   const handleDeleteDialogClose = () => setDeleteDialog(false);
   const handleDeleteKrDialogClose = () => setDeleteDialogKr(false);
+  const handleDeleteTaskDialogClose = () => setDeleteDialogTask(false);
+
+  const handleDialogTaskEditOpen = (task) => {
+    task.prevision_date = formatDate(task.task_prevision_date);
+    task.name = task.task_name;
+    task.description = task.task_description;
+    task.finished_at = task.task_finished_at;
+    task.status = task.task_status;
+    setFormDataTask({ ...task });
+    setOpenDialogTask(true);
+    setStatusDialogTask("Editar");
+  };
+
+  const handleDialogTaskClose = () => {
+    setStatusDialogTask("Novo")
+    setOpenDialogTask(false);
+    setSelectedKr(null);
+    setFormDataTask(optionsTask)
+  } 
 
   const validateToken = async (token) => {
     const endpoint = `${BASE_URL}/validate-token`;
@@ -217,29 +295,20 @@ function Okr() {
 
   const fetchObjectives = async () => {
     try {
-      const keyResultsResponse = await fetch(`${BASE_URL}/page_key_results`, { headers });
-      const keyResults = await keyResultsResponse.json();
+      const response = await fetch(`${BASE_URL}/tasks/all_tasks?team_id=${teamId}`, { headers });
+      const objectives = await response.json();
 
-      const response = await fetch(endpoint, { headers });
-      const results = await response.json();
-      const objectives = results
-        .filter(({ team_id }) => +team_id === +teamId)
-        .map((objective) => {
-          objective.key_results = keyResults.filter((keyResults) => keyResults.objective_id === objective.id) || [];
-          return objective;
-        });
-
-      const objectivesToStart = objectives.filter(({ status }) => !status);
+      
+      const objectivesToStartFilter = objectives.filter(({ status }) => !status);
       const finishedObjectives = objectives.filter(({ status }) => !!status)
-      setObjectivesToStart(objectivesToStart);
+      setObjectivesToStart(objectivesToStartFilter);
       setFinishedObjectives(finishedObjectives);
-      setDisplayObjectives(objectivesToStart);
+      setDisplayObjectives(objectivesToStartFilter);
       setChecked(false)
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const handleSearch = (newValue) => {
     setSearchValue(newValue);
@@ -324,6 +393,39 @@ function Okr() {
     }
   };
 
+  const handleSubmitTask = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    formDataTask.key_result_id = selectedKr
+    try {
+      let metodo;
+      let endpointSubmit = `${BASE_URL}/tasks`;
+      if (statusDialogTask !== "Editar") {
+        metodo = "POST"
+      }
+      else {
+        metodo = "PUT"
+        endpointSubmit += "/" + formDataTask.task_id
+      }
+      const response = await fetch(endpointSubmit, {
+        method: metodo,
+        headers,
+        body: JSON.stringify(formDataTask)
+      });
+      if (response.ok) {
+        setFormDataTask({ ...options });
+        handleDialogCloseTask();
+        fetchObjectives();
+      } else {
+        console.error("Failed to register a task.");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => setLoading(false), 1000);
+    }
+  };
+
   const handleDeleteObjective = async () => {
     if (!selectedObjective) {
       console.error("Nenhum objetivo selecionado para exclusão.");
@@ -365,6 +467,30 @@ function Okr() {
         handleDeleteKrDialogClose();
       } else {
         console.error("Falha ao excluir o resultado-chave.");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeleteTask = async () => {
+    if (!selectedTask) {
+      console.error("Nenhuma tarefa selecionada para exclusão.");
+      return;
+    }
+    let endpointDelete = `${BASE_URL}/tasks`;
+    try {
+      const response = await fetch(`${endpointDelete}/${selectedTask}`, {
+        method: "DELETE",
+        headers
+      });
+
+      if (response.ok) {
+        fetchObjectives();
+        setSelectedTask(null)
+        handleDeleteTaskDialogClose();
+      } else {
+        console.error("Falha ao excluir a tarefa.");
       }
     } catch (error) {
       console.error(error);
@@ -454,29 +580,29 @@ function Okr() {
       </header>
       <section className={`okr__list${!displayObjectives.length ? '--empty' : ''}`}>
         {
-          !displayObjectives.length ?
+          displayObjectives.length <= 0 ?
             <span>Não existem objetivos a serem exibidos!</span>
             : displayObjectives.map((objective, index) => (
-              <Accordion key={index} expanded={expanded === `${objective.name}-${objective.id}`} onChange={handleAccordionChange(`${objective.name}-${objective.id}`)}>
+              <Accordion key={index} expanded={expanded === `${objective[0].objective_name}-${objective[0].objective_id}`} onChange={handleAccordionChange(`${objective[0].objective_name}-${objective[0].objective_id}`)}>
                 <AccordionSummary
                   expandIcon={<HiChevronDown />}
-                  id={`${objective.name}-${objective.id}`}
+                  id={`${objective[0].name}-${objective[0].id}`}
                 >
-                  <Typography sx={{ width: '30%', flexShrink: 0 }}>{objective.name}</Typography>
-                  <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective.description}</Typography>
+                  <Typography sx={{ width: '30%', flexShrink: 0 }}>{objective[0].objective_name}</Typography>
+                  <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective[0].objective_description}</Typography>
                   <Typography sx={{ width: '15%'}}>
                   <div className="buttons">
                   <ThemeProvider theme={CreateTheme}> 
-                    <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective)}> <HiPencilSquare /> </Button>
-                    <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective)}> <HiTrash /> </Button>
+                    <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
+                    <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
                   </ThemeProvider>
                   </div>
                   </Typography>
                 </AccordionSummary>
-                <AccordionDetails className={`accordion-details${!objective.key_results.length ? '--empty' : ''}`}>
+                <AccordionDetails className={`accordion-details${!objective[0]?.key_results?.length || objective[0]?.key_results.length <= 0 ? '--empty' : ''}`}>
                   <ul>
                     {
-                      !objective.key_results.length ?
+                      !objective[0]?.key_results?.length ?
                         <li className="not-found-message">
                           <span>Nenhum KR cadastrado para o objetivo selecionado!</span>
                           
@@ -486,22 +612,64 @@ function Okr() {
                             <Table>
                               <TableBody>
                                 {
-                                  objective.key_results.map((keyResult, index) => (
-                                    <TableRow key={keyResult.name}>
-                                      <TableCell sx={{maxWidth: 5}} size="small" align="center">{<Avatar className="avatar">{`${keyResult.responsable.charAt(0).toUpperCase()}`}</Avatar>}</TableCell>
-                                      <TableCell size="medium" align="left">
-                                        <li>{keyResult.name}</li>
-                                        <li className="secondary-text">Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</li>
-                                      </TableCell>
-                                      <TableCell className="pencil-button" size="medium">
-                                      <div className="buttons">
+                                  objective[0].key_results.map((keyResult, index) => (
+                                    <Accordion key={keyResult.key_result_name} expanded={expandedTasks === `${keyResult.key_result_name}-${keyResult.key_result_id}`} onChange={handleAccordionTasksChange(`${keyResult.key_result_name}-${keyResult.key_result_id}`)}>
+                                      <AccordionSummary
+                                        expandIcon={<HiChevronDown />}
+                                        id={`${keyResult.key_result_name}-${keyResult.key_result_id}`}
+                                      >
+                                        <Typography sx={{ width: '20%', flexShrink: 0 }}>{<Avatar className="avatar">{`${keyResult.responsable_name.charAt(0).toUpperCase()}`}</Avatar>}</Typography>
+                                        <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
+                                        <Typography sx={{ width: '30%', color: 'text.secondary' }}>Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</Typography>
+                                        <Typography sx={{ width: '20%'}}>
+                                        <div className="buttons">
                                         <ThemeProvider theme={CreateTheme}> 
                                           <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
                                           <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
                                         </ThemeProvider>
-                                      </div>
-                                      </TableCell>
-                                    </TableRow>
+                                        </div>
+                                        </Typography>
+                                      </AccordionSummary>
+                                      <AccordionDetails className={`accordion-details${!keyResult?.tasks?.length || keyResult?.tasks.length <= 0 ? '--empty' : ''}`}>
+                                      {
+                                        !keyResult?.tasks ?
+                                          <li className="not-found-message">
+                                            <span>Nenhuma tarefa cadastrada para o resultado-chave selecionado!</span>
+                                            
+                                          </li>
+                                          : 
+                                            <TableContainer>
+                                              <Table>
+                                                <TableBody>
+                                                  {
+                                                    keyResult.tasks.map((task, index) => (
+                                                      <TableRow key={task.task_name}>
+                                                        <TableCell size="medium" align="left">
+                                                          <li>{task.task_name}</li>
+                                                          <li className="secondary-text">Descrição: {task.task_description} - Data prevista: {formatDateKr(task.task_prevision_date)}</li>
+                                                        </TableCell>
+                                                        <TableCell className="pencil-button" size="medium">
+                                                        <div className="buttons">
+                                                          <ThemeProvider theme={CreateTheme}> 
+                                                            <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
+                                                            <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
+                                                          </ThemeProvider>
+                                                        </div>
+                                                        </TableCell>
+                                                      </TableRow>
+                                                    ))
+                                                  }
+                                                </TableBody>
+                                              </Table>
+                                            </TableContainer>
+                                      }
+                                      <li className="create-okr">
+                                        <ThemeProvider theme={CreateTheme}>
+                                          <Button size="small" variant="contained" onClick={event => handleDialogTaskOpen(keyResult.key_result_id)}>Cadastrar Tarefa</Button>
+                                        </ThemeProvider>
+                                      </li>
+                                      </AccordionDetails>
+                                    </Accordion>
                                   ))
                                 }
 
@@ -511,7 +679,7 @@ function Okr() {
                     }
                     <li className="create-okr">
                       <ThemeProvider theme={CreateTheme}>
-                        <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective.id)}>Cadastrar Key Result</Button>
+                        <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective[0].objective_id)}>Cadastrar Key Result</Button>
                       </ThemeProvider>
                     </li>
                   </ul>
@@ -671,6 +839,73 @@ function Okr() {
         <DialogActions>
           <Button onClick={handleDeleteKrDialogClose}>Cancelar</Button>
           <Button onClick={handleDeleteKr}>Deletar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openDialogTask} onClose={handleDialogCloseTask}>
+        <DialogTitle>{statusDialogTask} Tarefa</DialogTitle>
+        <DialogContent>
+          <form onSubmit={handleSubmitTask}>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Nome"
+              type="text"
+              fullWidth
+              value={formDataTask.name}
+              onChange={handleChangeTask}
+              disabled={loading}
+            />
+            <TextField
+              margin="dense"
+              name="prevision_date"
+              label="Data Limite"
+              type="date"
+              fullWidth
+              value={formDataTask.prevision_date}
+              onChange={handleChangeTask}
+              InputLabelProps={{
+                shrink: true
+              }}
+              disabled={loading}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              name="description"
+              label="Descrição"
+              type="text"
+              fullWidth
+              value={formDataTask.description}
+              onChange={handleChangeTask}
+              multiline
+              rows={4}
+              disabled={loading}
+            />
+            <FormControlLabel control={
+              <Checkbox 
+                checked={formDataTask.status === true}
+                sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                onChange={handleChangeCheckboxTask}
+              />
+            } label="Finalizada" />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={loading} onClick={handleDialogTaskClose}>Cancelar</Button>
+          <Button type="submit" variant="contained" disabled={loading} onClick={handleSubmitTask}>
+            {!!loading ? 'Enviando...' : 'Salvar'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={deleteDialogTask} onClose={handleDeleteTaskDialogClose}>
+        <DialogTitle>Confirmar exclusão</DialogTitle>
+        <DialogContent>
+          Tem certeza de que deseja excluir esta tarefa?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteTaskDialogClose}>Cancelar</Button>
+          <Button onClick={handleDeleteTask}>Deletar</Button>
         </DialogActions>
       </Dialog>
     </main>

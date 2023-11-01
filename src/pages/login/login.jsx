@@ -1,5 +1,4 @@
 import { Button } from '@mui/material';
-import jwtDecode from 'jwt-decode';
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png';
@@ -46,7 +45,6 @@ function Login() {
       localStorage.setItem("birth_date", data.birth_date);
       localStorage.setItem("role_id", data.role_id);
       localStorage.setItem("team_id", data.team_id);
-      console.log('user =>', jwtDecode(data.token));
       navigate('/painel');
     } catch (error) {
       console.error(error);
