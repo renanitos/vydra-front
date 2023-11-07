@@ -1,42 +1,92 @@
-.profile {
-    background-color: #F8F9FD;
+body {
+  overflow-y: scroll;
+}
 
-    .profile-container {
-        background-color: #fff;
-        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 15px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-self: center;
-        justify-content: center;
-        flex-basis: 50%;
-        height: 50%;
-        width: 20%;
-        margin-top: 50px;
-        margin-left: 35%;
-    
-        .profile-header {
-        font-size: 24px;
-        margin-bottom: 20px;
-        }
-    
-        .profile-details {
-        display: flex;
-        justify-content: space-between;
-    
-        div {
-            flex: 1;
-    
-            p {
-            color: #1F1F1F;
-            margin-bottom: 10px;
-            }
-    
-            strong {
-            font-weight: bold;
-        }
-      }
-    }
+.profile-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+    width: 40%;
+    margin-top: 30px;
+    margin-left: 30%;
+    margin-right: 30%;
+    color: #1F1F1F;
+    padding-bottom: 30px;
   }
+       
+.profile-details {
+    justify-content: space-between;
+  }
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  margin-top: 20px;
+  color: #1F1F1F
+}
+
+.form {
+  width: 375px;
+}
+
+.label-form {
+  font-size: 14px;
+  color: #1F1F1F;
+  margin-bottom: 10px;
+}
+
+.input-form {
+  font-size: 1rem;
+  width: 100%;
+  height: 30px;
+  padding: 2px 5px;
+  color: #5a5959;
+  border-width: 1px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border-color: grey;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 70px;
+  height: 70px;
+  background-color: #464BA8;
+  border-radius: 50%;
+  box-shadow: 0 4px 4px #ccc;
+  margin-bottom: 30px;
+}
+
+.initials {
+  font-size: 35px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.success-message {
+  margin-top: 2px;
+  font-size: 14px;
+  color: green;
+}
+
+.div-buttons-change {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  height: auto;
+}
+
+.margin-30 {
+  margin-top: 30px;
 }

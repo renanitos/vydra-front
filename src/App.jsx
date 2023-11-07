@@ -8,6 +8,7 @@ import Analytics from "./pages/analytics/analytics.jsx";
 import Painel from "./pages/painel/painel.jsx";
 import Climate from "./pages/climate/climate.jsx";
 import Profile from "./pages/profile/profile.jsx";
+import ChangePassword from "./pages/profile/change_password.jsx";
 import Teams from "./pages/teams/teams.jsx";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/painel" element={<Painel />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/change_password" element={<ChangePassword />} />
         <Route path="/profile/:employee_id/climate" element={<Climate />} />
         <Route path="/teams/:team_id/okr" element={<Okr />} />
         <Route path="/teams" element={<Teams />} />
