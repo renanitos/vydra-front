@@ -45,6 +45,7 @@ function Login() {
       localStorage.setItem("birth_date", data.birth_date);
       localStorage.setItem("role_id", data.role_id);
       localStorage.setItem("team_id", data.team_id);
+      localStorage.setItem("user_id", data.user_id);
       navigate('/painel');
     } catch (error) {
       console.error(error);
