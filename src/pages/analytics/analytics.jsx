@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/navbar/navbar.jsx";
+import ChatBox from "../../components/ChatBox/ChatBox.jsx";
 import jwtDecode from "jwt-decode";
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Analytics() {
-
   const [data, setData] = useState(null);
+  const [analyzedData, setAnalyzedData] = useState(null);
   const token = localStorage.getItem("token");
   let { team_id: teamId } = useParams();
 
@@ -13,6 +14,7 @@ function Analytics() {
   const BASE_URL = "https://vydra-back.onrender.com";
 
   const endpointData = `${BASE_URL}/tasks/all_tasks`;
+  const endpointAnswers = `${BASE_URL}/answers/${teamId}`;
   const headers = {
     'Content-Type': 'application/json',
     token
@@ -37,8 +39,7 @@ function Analytics() {
       body: JSON.stringify(body),
     };
     const response = await fetch(endpoint, options);
-    if (response.status !== 200) return false;
-    return true;
+    return response.status === 200;
   };
 
   const checkToken = () => {
@@ -53,19 +54,6 @@ function Analytics() {
     window.addEventListener('storage', handleStorageEvent);
   };
 
-  const treatRoute = async () => {
-    checkToken();
-    try {
-      if (teamId) {
-        const response = await fetch(`${BASE_URL}/teams/${teamId}`, { headers });
-        const result = await response.json();
-        setTeam(result);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const fetchData = async () => {
     try {
       const url = `${endpointData}?team_id=${teamId}`;
@@ -77,20 +65,35 @@ function Analytics() {
     }
   };
 
+  const fetchAnswers = async () => {
+    try {
+      const response = await fetch(endpointAnswers, { headers });
+      const answers = await response.json();
+      return answers;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
   useEffect(() => {
     fetchData();
-    treatRoute();
-  }, []);
+    checkToken();
+    fetchAnswers().then((answers) => {
+      if (data) {
+        const combinedData = {
+          tasks: data,
+          answers: answers,
+        };
+        setAnalyzedData(combinedData);
+      }
+    });
+  }, [data, teamId]);
 
   return (
-    <div className="analytics"> 
-     <Navbar />
-     <h1 className="userName">Central de análise</h1>
-     {data && (
-       <div>
-         <pre>{JSON.stringify(data, null, 2)}</pre>
-       </div>
-     )}
+    <div className="analytics">
+      <Navbar />
+      <ChatBox />
     </div>
   );
 }
