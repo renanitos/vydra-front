@@ -36,7 +36,6 @@ function Okr() {
   };
   const optionsKr = {
     name: '',
-    weight: 0,
     objective_id: null,
     prevision_date_formated: '',
     responsable_id: null,
@@ -622,7 +621,6 @@ function Okr() {
                                           >
                                             <Typography sx={{ width: '20%', flexShrink: 0 }}>{<Avatar className="avatar">{`${keyResult.responsable_name.charAt(0).toUpperCase()}`}</Avatar>}</Typography>
                                             <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
-                                            <Typography sx={{ width: '30%', color: 'text.secondary' }}>Peso: {keyResult.weight} - Data-limite: {formatDateKr(keyResult.prevision_date)}</Typography>
                                             <Typography sx={{ width: '20%'}}>
                                             <div className="buttons">
                                             <ThemeProvider theme={CreateTheme}> 
@@ -777,18 +775,6 @@ function Okr() {
               InputLabelProps={{
                 shrink: true
               }}
-              disabled={loading}
-            />
-            <TextField
-              autoFocus
-              margin="dense"
-              name="weight"
-              label="Peso"
-              type="number"
-              InputProps={{ inputProps: { min: 0 } }}
-              fullWidth
-              value={formDataKr.weight}
-              onChange={handleChangeKr}
               disabled={loading}
             />
             <Autocomplete
