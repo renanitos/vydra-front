@@ -1,10 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Switch, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, Switch, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import Avatar from '@mui/material/Avatar';
 import { ThemeProvider } from '@mui/material/styles';
 import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
-import { HiCheck, HiChevronDown, HiEye, HiOutlineStop, HiPencilSquare, HiPlus, HiTrash } from "react-icons/hi2";
+import { HiChevronDown, HiEye, HiPencilSquare, HiPlus, HiTrash } from "react-icons/hi2";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import CreateTheme from "../../components/colors.jsx";
 import Navbar from "../../components/navbar/navbar.jsx";
@@ -68,6 +68,7 @@ function Okr() {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [deleteDialogKr, setDeleteDialogKr] = useState(false);
   const [deleteDialogTask, setDeleteDialogTask] = useState(false);
+  const [concludeDialogTask, setConcludeDialogTask] = useState(false);
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [selectedKr, setSelectedKr] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -204,9 +205,21 @@ function Okr() {
     setSelectedTask(task.task_id)
     setDeleteDialogTask(true);
   }
+  const handleConcludeTaskDialog = async (task, keyResultId) => {
+    task.prevision_date = formatDate(task.task_prevision_date);
+    task.name = task.task_name;
+    task.description = task.task_description;
+    task.finished_at = task.task_finished_at;
+    setSelectedKr(keyResultId)
+    setFormDataTask({ ...task });
+    setSelectedTask(task.task_id)
+    setConcludeDialogTask(true);
+    setStatusDialogTask("Editar")
+  }
   const handleDeleteDialogClose = () => setDeleteDialog(false);
   const handleDeleteKrDialogClose = () => setDeleteDialogKr(false);
   const handleDeleteTaskDialogClose = () => setDeleteDialogTask(false);
+  const handleConcludeTaskDialogClose = () => setConcludeDialogTask(false);
 
   const handleDialogTaskEditOpen = (task) => {
     task.prevision_date = formatDate(task.task_prevision_date);
@@ -297,7 +310,6 @@ function Okr() {
       const response = await fetch(`${BASE_URL}/tasks/all_tasks?team_id=${teamId}`, { headers });
       const objectives = await response.json();
 
-      
       const objectivesToStartFilter = objectives.filter(({ status }) => !status);
       const finishedObjectives = objectives.filter(({ status }) => !!status)
       setObjectivesToStart(objectivesToStartFilter);
@@ -321,9 +333,11 @@ function Okr() {
     }
   };
 
-  const handleTeamSelection = (teamId) => {
-    navigate(`/teams/${teamId}/okr`)
-    window.location.reload()
+  const handleTeamSelection = async (team) => {
+    teamId = team
+    treatRoute()
+    fetchObjectives()
+    fetchEmployees()
   };
 
   const handleSubmit = async (event) => {
@@ -392,10 +406,11 @@ function Okr() {
     }
   };
 
-  const handleSubmitTask = async (event) => {
+  const handleSubmitTask = (reverseTaskStatus=false) => async (event) => {
     event.preventDefault();
     setLoading(true);
     formDataTask.key_result_id = selectedKr
+    if (reverseTaskStatus) formDataTask.status = !formDataTask.task_status
     try {
       let metodo;
       let endpointSubmit = `${BASE_URL}/tasks`;
@@ -410,11 +425,13 @@ function Okr() {
         method: metodo,
         headers,
         body: JSON.stringify(formDataTask)
-      });
+      })
       if (response.ok) {
         setFormDataTask({ ...options });
         handleDialogCloseTask();
+        handleConcludeTaskDialogClose();
         fetchObjectives();
+        setExpandedTasks(null)
       } else {
         console.error("Failed to register a task.");
       }
@@ -584,18 +601,28 @@ function Okr() {
             : displayObjectives.map((objective, index) => (
                 <Accordion key={index} expanded={expanded === `${objective[0].objective_name}-${objective[0].objective_id}`} onChange={handleAccordionChange(`${objective[0].objective_name}-${objective[0].objective_id}`)}>
                   <AccordionSummary
-                    expandIcon={<HiChevronDown />}
+                    expandIcon={
+                      <Tooltip title="Exibir resultados-chave">
+                        <IconButton>
+                          <HiChevronDown style={{ fontSize: 21 }} />
+                        </IconButton>
+                      </Tooltip>
+                    }
                     id={`${objective[0].name}-${objective[0].id}`}
                     >
                     <Typography sx={{ width: '30%', flexShrink: 0 }}>{objective[0].objective_name}</Typography>
                     <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective[0].objective_description}</Typography>
-                    <Typography sx={{ width: '15%'}}>
-                    <div className="buttons">
-                    <ThemeProvider theme={CreateTheme}> 
-                      <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
-                      <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
-                    </ThemeProvider>
-                    </div>
+                    <Typography sx={{ width: '25%'}}>
+                      <div className="buttons">
+                      <ThemeProvider theme={CreateTheme}> 
+                        <Tooltip title="Editar">
+                          <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
+                        </Tooltip>
+                        <Tooltip title="Excluir">
+                          <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
+                        </Tooltip>
+                      </ThemeProvider>
+                      </div>
                     </Typography>
                   </AccordionSummary>
                   <AccordionDetails className={`accordion-details${!objective[0]?.key_results?.length || objective[0]?.key_results.length <= 0 ? '--empty' : ''}`}>
@@ -616,16 +643,26 @@ function Okr() {
                                       <section className={`task__list${!objective[0].key_results.length ? '--empty' : ''}`}>
                                         <Accordion key={keyResult.key_result_name} expanded={expandedTasks === `${keyResult.key_result_name}-${keyResult.key_result_id}`} onChange={handleAccordionTasksChange(`${keyResult.key_result_name}-${keyResult.key_result_id}`)}>
                                           <AccordionSummary
-                                            expandIcon={<HiChevronDown />}
+                                            expandIcon={
+                                              <Tooltip title="Exibir tarefas">
+                                                <IconButton>
+                                                  <HiChevronDown style={{ fontSize: 21 }} />
+                                                </IconButton>
+                                              </Tooltip>
+                                            }
                                             id={`${keyResult.key_result_name}-${keyResult.key_result_id}`}
                                           >
                                             <Typography sx={{ width: '20%', flexShrink: 0 }}>{<Avatar className="avatar">{`${keyResult.responsable_name.charAt(0).toUpperCase()}`}</Avatar>}</Typography>
                                             <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
                                             <Typography sx={{ width: '20%'}}>
                                             <div className="buttons">
-                                            <ThemeProvider theme={CreateTheme}> 
-                                              <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
-                                              <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                            <ThemeProvider theme={CreateTheme}>
+                                              <Tooltip title="Editar">
+                                                <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
+                                              </Tooltip>
+                                              <Tooltip title="Excluir">
+                                                <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                              </Tooltip>
                                             </ThemeProvider>
                                             </div>
                                             </Typography>
@@ -646,16 +683,29 @@ function Okr() {
                                                             keyResult.tasks.map((task, index) => (
                                                                 <TableRow key={task.task_name}>
                                                                   <TableCell size="medium" align="left">
-                                                                    <li>{task.task_status ? <HiCheck /> : <HiOutlineStop />}  {task.task_name}</li>
+                                                                  <Tooltip title={task.task_status ? 'Desfazer conclusão' : 'Concluir'}>
+                                                                    <Checkbox
+                                                                      checked={task.task_status}
+                                                                      onChange={() => handleConcludeTaskDialog(task, keyResult.key_result_id)}
+                                                                      name="Concluir"
+                                                                    />
+                                                                  </Tooltip>
+                                                                  </TableCell>
+                                                                  <TableCell size="medium" align="left">
+                                                                    <li className="primary-text">{task.task_name}</li>
                                                                   </TableCell>
                                                                   <TableCell size="medium" align="center">
                                                                     <li className="secondary-text">Data prevista: {formatDateKr(task.task_prevision_date)}</li>
                                                                   </TableCell>
                                                                   <TableCell size="medium" align="center">
                                                                     <div className="buttons">
-                                                                      <ThemeProvider theme={CreateTheme}> 
-                                                                        <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
-                                                                        <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
+                                                                      <ThemeProvider theme={CreateTheme}>
+                                                                        <Tooltip title="Editar">
+                                                                          <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
+                                                                        </Tooltip>
+                                                                        <Tooltip title="Excluir">
+                                                                          <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
+                                                                        </Tooltip>
                                                                       </ThemeProvider>
                                                                     </div>
                                                                   </TableCell>
@@ -898,6 +948,16 @@ function Okr() {
         <DialogActions>
           <Button onClick={handleDeleteTaskDialogClose}>Cancelar</Button>
           <Button onClick={handleDeleteTask}>Deletar</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={concludeDialogTask} onClose={handleConcludeTaskDialogClose}>
+        <DialogTitle>Confirmar conclusão</DialogTitle>
+        <DialogContent>
+          Tem certeza de que deseja editar esta tarefa?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConcludeTaskDialogClose}>Cancelar</Button>
+          <Button onClick={handleSubmitTask(true)}>Confirmar</Button>
         </DialogActions>
       </Dialog>
     </main>
