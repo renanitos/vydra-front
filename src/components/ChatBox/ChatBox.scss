@@ -1,18 +1,24 @@
 .span {
-    font-weight: 400;
+  font-weight: 400;
 }
+
 .chat-box {
-    width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: height 0.3s ease-in-out;
-    background-color: #fff;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+  width: 150px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+  z-index: 1000;
+  position: absolute;
+  right: 0;
   
-    &.expanded {
-      height: 600px;
-    }
+  &.expanded {
+    width: 400px;
+    height: 600px;
+    z-index: 1001;  
+  }
   
     .header {
       background-color: #cedeef;
