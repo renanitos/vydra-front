@@ -281,14 +281,18 @@ function Teams() {
             <TextField {...params} label="Buscar times" />
           )}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className="new-team-button"
-          onClick={handleDialogOpen}
-        >
-          Novo Time
-        </Button>
+        {
+          localStorage.getItem('administrator') == "true" && (
+            <Button
+              variant="contained"
+              color="primary"
+              className="new-team-button"
+              onClick={handleDialogOpen}
+            >
+              Novo Time
+            </Button>
+          )
+        }
       </div>
       <div className="table-container">
         <Paper sx={{ width: "100%" }}>
@@ -316,7 +320,11 @@ function Teams() {
                       <TableCell align="center">{team.description}</TableCell>
                       <TableCell align="center">{team.major_team_name}</TableCell>
                       <TableCell align="center">
-                      <HiOutlinePencilAlt onClick={(event) => handleMenuOpen(event, team)} />
+                      {
+                        localStorage.getItem('administrator') == "true" && (
+                          <HiOutlinePencilAlt onClick={(event) => handleMenuOpen(event, team)} />
+                        )
+                      }
                         <Menu
                           anchorEl={menuAnchorEl}
                           open={Boolean(menuAnchorEl && selectedTeamId === team.id)}
