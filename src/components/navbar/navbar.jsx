@@ -77,9 +77,11 @@ function Navbar() {
         <Link to="/organograma" className={`navbar-link ${isActiveLink('/organograma') ? 'active' : ''}`}>
           Organograma
         </Link>
-        <Link to={`/teams/${teamId}/analytics`} className={`navbar-link ${isActiveLink(`/teams/${teamId}/analytics`) ? 'active' : ''}`}>
-          Analytics
-        </Link>
+        { localStorage.getItem('administrator') == "true" && (
+          <Link to={`/teams/${teamId}/analytics`} className={`navbar-link ${isActiveLink(`/teams/${teamId}/analytics`) ? 'active' : ''}`}>
+            Analytics
+          </Link>
+        )}
         <Link to={`/profile/${employeeId}/climate`} className={`navbar-link ${isActiveLink(`/profile/${employeeId}/climate`) ? 'active' : ''}`}>
           Ondas
         </Link>
