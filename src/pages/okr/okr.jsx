@@ -733,9 +733,13 @@ function Okr() {
                                                   </TableContainer>
                                             }
                                           <li className="create-okr">
-                                            <ThemeProvider theme={CreateTheme}>
-                                              <Button size="small" variant="contained" onClick={event => handleDialogTaskOpen(keyResult.key_result_id)}>Cadastrar Tarefa</Button>
-                                            </ThemeProvider>
+                                            {
+                                              localStorage.getItem('administrator') == "true" && (
+                                                <ThemeProvider theme={CreateTheme}>
+                                                  <Button size="small" variant="contained" onClick={event => handleDialogTaskOpen(keyResult.key_result_id)}>Cadastrar Tarefa</Button>
+                                                </ThemeProvider>
+                                              )
+                                            }
                                           </li>
                                           </AccordionDetails>
                                         </Accordion>
@@ -748,9 +752,13 @@ function Okr() {
                             </TableContainer>
                       }
                       <li className="create-okr">
-                        <ThemeProvider theme={CreateTheme}>
-                          <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective[0].objective_id)}>Cadastrar Key Result</Button>
-                        </ThemeProvider>
+                        {
+                          localStorage.getItem('administrator') == "true" && (
+                            <ThemeProvider theme={CreateTheme}>
+                              <Button size="small" variant="contained" onClick={event => handleDialogKrOpen(objective[0].objective_id)}>Cadastrar Key Result</Button>
+                            </ThemeProvider>
+                          )
+                        }
                       </li>
                     </ul>
                   </AccordionDetails>
@@ -902,7 +910,7 @@ function Okr() {
       <Dialog open={openDialogTask} onClose={handleDialogCloseTask}>
         <DialogTitle>{statusDialogTask} Tarefa</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmitTask}>
+          <form onSubmit={handleSubmitTask(false)}>
             <TextField
               autoFocus
               margin="dense"
@@ -951,7 +959,7 @@ function Okr() {
         </DialogContent>
         <DialogActions>
           <Button disabled={loading} onClick={handleDialogTaskClose}>Cancelar</Button>
-          <Button type="submit" variant="contained" disabled={loading} onClick={handleSubmitTask}>
+          <Button type="submit" variant="contained" disabled={loading} onClick={handleSubmitTask(false)}>
             {!!loading ? 'Enviando...' : 'Salvar'}
           </Button>
         </DialogActions>
