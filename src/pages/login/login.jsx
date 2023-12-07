@@ -9,7 +9,7 @@ function Login() {
   const BASE_URL = "https://vydra-back.onrender.com";
   const endpoint = `${BASE_URL}/login`
   const [error, setError] = useState ('');
-  const helpMessage = "Caso esteja com problemas para efetuar o login tente alterar sua senha. Caso ainda enfrente esse e outros problemas entre em contato com nosso suporte no email ";
+  const helpMessage = "Caso esteja com problemas para efetuar o login, entre em contato com nosso suporte no email ";
 
   const [credentials, setCredentials] = useState({
     email: '',
@@ -46,10 +46,11 @@ function Login() {
       localStorage.setItem("role_id", data.role_id);
       localStorage.setItem("team_id", data.team_id);
       localStorage.setItem("user_id", data.user_id);
+      localStorage.setItem("administrator", data.administrator);
       navigate('/painel');
     } catch (error) {
       console.error(error);
-      setError("Sua conta ou senha está incorreta.");
+      setError("Sua conta e/ou senha está(ão) incorreta(s).");
     }
   };
 
@@ -80,13 +81,13 @@ function Login() {
           </div>
           <span className="error-message">{error}</span>
           <span className='forgotten-password'>
-            <Link to='#'>Esqueceu a senha?</Link>
+            <Link to='#' onClick={toggleHelpDiv}>Esqueceu a senha?</Link>
           </span>
           <Button className='btn-submit' onClick={loginRequest}>Entrar</Button>
         </form>
       </div>
       <div className={`help-div ${showHelpDiv ? 'visible' : ''}`}>
-        <p className='text-help'>{helpMessage} <a className='email' href='mailto:vydra@gestão.com.br?subject=Problemas com&body=Estou enfrentando problemas com '>vydra@gestao.com.br</a>.</p>
+        <p className='text-help'>{helpMessage} <a className='email' href='mailto:vydra@gestão.com.br?subject=Problemas com&body=Estou enfrentando problemas com '>vydra.suporte@gmail.com</a>.</p>
         <Link to={'#'} className='btn-back' onClick={toggleHelpDiv}>VOLTAR</Link>
       </div>
       <div className={`overlay ${showHelpDiv ? 'visible' : ''}`}></div>

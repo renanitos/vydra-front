@@ -589,7 +589,11 @@ function Okr() {
             />
           </p>
           <ThemeProvider theme={CreateTheme}>
-          <Button size="small" variant="contained" onClick={handleDialogObjectiveOpen} startIcon={<HiPlus />}> Objetivo</Button>
+          {
+            localStorage.getItem('administrator') == "true" && (
+              <Button size="small" variant="contained" onClick={handleDialogObjectiveOpen} startIcon={<HiPlus />}> Objetivo</Button>
+            )
+          }
           <Button component={Link} to="/teams" variant="contained" startIcon={<HiEye />}>Ver Times</Button>
           </ThemeProvider>
         </div>
@@ -614,14 +618,18 @@ function Okr() {
                     <Typography sx={{ width: '60%', color: 'text.secondary' }}>{objective[0].objective_description}</Typography>
                     <Typography sx={{ width: '25%'}}>
                       <div className="buttons">
-                      <ThemeProvider theme={CreateTheme}> 
-                        <Tooltip title="Editar">
-                          <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
-                        </Tooltip>
-                        <Tooltip title="Excluir">
-                          <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
-                        </Tooltip>
-                      </ThemeProvider>
+                      {
+                        localStorage.getItem('administrator') == "true" && (
+                          <ThemeProvider theme={CreateTheme}> 
+                            <Tooltip title="Editar">
+                              <Button variant="contained" color="primary" onClick={event => handleDialogObjectiveEditOpen(objective[0])}> <HiPencilSquare /> </Button>
+                            </Tooltip>
+                            <Tooltip title="Excluir">
+                              <Button variant="contained" color="secondary" onClick={event => handleDeleteObjectiveDialog(objective[0])}> <HiTrash /> </Button>
+                            </Tooltip>
+                          </ThemeProvider>
+                        )
+                      }
                       </div>
                     </Typography>
                   </AccordionSummary>
@@ -656,14 +664,18 @@ function Okr() {
                                             <Typography sx={{ width: '40%', flexShrink: 0 }}>{keyResult.key_result_name}</Typography>
                                             <Typography sx={{ width: '20%'}}>
                                             <div className="buttons">
-                                            <ThemeProvider theme={CreateTheme}>
-                                              <Tooltip title="Editar">
-                                                <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
-                                              </Tooltip>
-                                              <Tooltip title="Excluir">
-                                                <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
-                                              </Tooltip>
-                                            </ThemeProvider>
+                                              {
+                                                localStorage.getItem('administrator') == "true" && (
+                                                  <ThemeProvider theme={CreateTheme}>
+                                                    <Tooltip title="Editar">
+                                                      <Button variant="contained" color="primary" onClick={event => handleDialogKrEditOpen(keyResult)}> <HiPencilSquare /> </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title="Excluir">
+                                                      <Button variant="contained" color="secondary" onClick={event => handleDeleteKrDialog(keyResult)}> <HiTrash /> </Button>
+                                                    </Tooltip>
+                                                  </ThemeProvider>
+                                                )
+                                              }
                                             </div>
                                             </Typography>
                                           </AccordionSummary>
@@ -699,14 +711,18 @@ function Okr() {
                                                                   </TableCell>
                                                                   <TableCell size="medium" align="center">
                                                                     <div className="buttons">
-                                                                      <ThemeProvider theme={CreateTheme}>
-                                                                        <Tooltip title="Editar">
-                                                                          <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
-                                                                        </Tooltip>
-                                                                        <Tooltip title="Excluir">
-                                                                          <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
-                                                                        </Tooltip>
-                                                                      </ThemeProvider>
+                                                                      {
+                                                                        localStorage.getItem('administrator') == "true" && (
+                                                                          <ThemeProvider theme={CreateTheme}>
+                                                                            <Tooltip title="Editar">
+                                                                              <Button variant="contained" color="primary" onClick={event => handleDialogTaskEditOpen(task)}> <HiPencilSquare /> </Button>
+                                                                            </Tooltip>
+                                                                            <Tooltip title="Excluir">
+                                                                              <Button variant="contained" color="secondary" onClick={event => handleDeleteTaskDialog(task)}> <HiTrash /> </Button>
+                                                                            </Tooltip>
+                                                                          </ThemeProvider>
+                                                                        )
+                                                                      }
                                                                     </div>
                                                                   </TableCell>
                                                                 </TableRow>

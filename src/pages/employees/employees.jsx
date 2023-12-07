@@ -304,14 +304,18 @@ function Employees() {
             <TextField {...params} label="Buscar funcionários" />
           )}
         />
-        <Button
-          variant="contained"
-          color="primary"
-          className="new-employee-button"
-          onClick={handleDialogOpen}
-        >
-          Novo funcionário
-        </Button>
+        {
+          localStorage.getItem('administrator') == "true" && (
+            <Button
+              variant="contained"
+              color="primary"
+              className="new-employee-button"
+              onClick={handleDialogOpen}
+            >
+              Novo funcionário
+            </Button>
+          )
+        }
       </div>
       <div className="table-container">
         <Paper sx={{ width: "100%" }}>
@@ -339,7 +343,11 @@ function Employees() {
                       <TableCell align="center">{employee.role_name}</TableCell>
                       <TableCell align="center">{employee.team_name}</TableCell>
                       <TableCell align="center">
-                      <HiOutlinePencilAlt onClick={(event) => handleMenuOpen(event, employee)} />
+                        {
+                          localStorage.getItem('administrator') == "true" && (
+                            <HiOutlinePencilAlt onClick={(event) => handleMenuOpen(event, employee)} />
+                          )
+                        }
                         <Menu
                           anchorEl={menuAnchorEl}
                           open={Boolean(menuAnchorEl && selectedEmployeeId === employee.id)}
