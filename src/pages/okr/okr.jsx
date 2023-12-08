@@ -386,6 +386,7 @@ function Okr() {
     event.preventDefault();
     setLoading(true);
     formDataKr.objective_id = selectedObjective
+    teamId = currentTeamId
     try {
       let metodo;
       let endpointSubmit = `${BASE_URL}/key_results`;
@@ -419,7 +420,9 @@ function Okr() {
     event.preventDefault();
     setLoading(true);
     formDataTask.key_result_id = selectedKr
+    formDataTask.status = formDataTask.task_status
     if (reverseTaskStatus) formDataTask.status = !formDataTask.task_status
+    teamId = currentTeamId
     try {
       let metodo;
       let endpointSubmit = `${BASE_URL}/tasks`;
@@ -480,6 +483,7 @@ function Okr() {
       console.error("Nenhum resultado-chave selecionado para exclusão.");
       return;
     }
+    teamId = currentTeamId
     let endpointDelete = `${BASE_URL}/key_results`;
     try {
       const response = await fetch(`${endpointDelete}/${selectedKr}`, {
@@ -504,6 +508,7 @@ function Okr() {
       console.error("Nenhuma tarefa selecionada para exclusão.");
       return;
     }
+    teamId = currentTeamId
     let endpointDelete = `${BASE_URL}/tasks`;
     try {
       const response = await fetch(`${endpointDelete}/${selectedTask}`, {
