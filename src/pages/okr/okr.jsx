@@ -15,7 +15,7 @@ function Okr() {
   let { team_id: teamId } = useParams();
 
   const navigate = useNavigate();
-  const BASE_URL = "https://vydra-back.onrender.com";
+  const BASE_URL = 'https://vydra-back.onrender.com';
   const endpoint = `${BASE_URL}/objectives`;
   const endpointTeams = `${BASE_URL}/teams`;
   const headers = {
@@ -28,6 +28,7 @@ function Okr() {
   const [finishedObjectives, setFinishedObjectives] = useState([]);
   const [team, setTeam] = useState({});
   const options = {
+    id: 0,
     name: '',
     description: '',
     prevision_date: '',
@@ -35,6 +36,7 @@ function Okr() {
     team_id: teamId
   };
   const optionsKr = {
+    id: '',
     name: '',
     objective_id: null,
     prevision_date_formated: '',
@@ -50,10 +52,6 @@ function Okr() {
     task_id: null,
     task_prevision_date: '',
     task_status: false,
-    name: '',
-    description: '',
-    prevision_date: '',
-    status: false
   };
   const [formData, setFormData] = useState({ ...options });
   const [formDataKr, setFormDataKr] = useState({ ...optionsKr, responsable: "" });
@@ -158,6 +156,7 @@ function Okr() {
     setOpenDialog(true)
     setStatusDialog("Editar")
   }
+
   const handleDialogKrOpen = (objectiveId) => {
     setOpenDialogKr(true);
     setSelectedObjective(objectiveId)
@@ -352,7 +351,7 @@ function Okr() {
       }
       else {
         metodo = "PUT"
-        endpointSubmit = endpoint + "/" + formData.id
+        endpointSubmit = endpoint + "/" + formData.objective_id
       }
       const response = await fetch(endpointSubmit, {
         method: metodo,
@@ -385,7 +384,7 @@ function Okr() {
       }
       else {
         metodo = "PUT"
-        endpointSubmit += "/" + formDataKr.id
+        endpointSubmit += "/" + formDataKr.key_result_id
       }
       const response = await fetch(endpointSubmit, {
         method: metodo,
@@ -393,7 +392,7 @@ function Okr() {
         body: JSON.stringify(formDataKr)
       });
       if (response.ok) {
-        setFormDataKr({ ...options });
+        setFormDataKr({ ...optionsKr });
         handleDialogCloseKr();
         fetchObjectives();
       } else {
@@ -427,7 +426,7 @@ function Okr() {
         body: JSON.stringify(formDataTask)
       })
       if (response.ok) {
-        setFormDataTask({ ...options });
+        setFormDataTask({ ...optionsTask });
         handleDialogCloseTask();
         handleConcludeTaskDialogClose();
         fetchObjectives();
