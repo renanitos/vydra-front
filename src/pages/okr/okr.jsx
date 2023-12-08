@@ -77,6 +77,7 @@ function Okr() {
   const [searchValue, setSearchValue] = useState("");
   const [teams, setTeams] = useState([]);
   const [filteredTeams, setFilteredTeams] = useState([]);
+  const [currentTeamId, setCurrentTeamId] = useState("");
 
   const handleCheckChange = (event) => {
     const isChecked = event.target.checked;
@@ -276,10 +277,6 @@ function Okr() {
     }
   };
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
   const fetchTeams = async () => {
     try {
       const response = await fetch(endpointTeams, {
@@ -308,15 +305,26 @@ function Okr() {
     try {
       const response = await fetch(`${BASE_URL}/tasks/all_tasks?team_id=${teamId}`, { headers });
       const objectives = await response.json();
+      const objectivesToStartFilter = new Array()
+      const finishedObjectives = new Array()
 
-      const objectivesToStartFilter = objectives.filter(({ status }) => !status);
-      const finishedObjectives = objectives.filter(({ status }) => !!status)
+      objectives.forEach((objective) => {
+        if (objective[0].status == true) finishedObjectives.push(objective)
+        else objectivesToStartFilter.push(objective)
+      });
+
       setObjectivesToStart(objectivesToStartFilter);
       setFinishedObjectives(finishedObjectives);
       setDisplayObjectives(objectivesToStartFilter);
       setChecked(false)
     } catch (error) {
       console.error(error);
+    } finally {
+      setCurrentTeamId(teamId)
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        ["team_id"]: currentTeamId
+      }));
     }
   };
 
@@ -342,6 +350,8 @@ function Okr() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+    formData.team_id = currentTeamId
+    teamId = currentTeamId
     try {
       let metodo;
       let endpointSubmit;
@@ -446,6 +456,7 @@ function Okr() {
       console.error("Nenhum objetivo selecionado para exclusão.");
       return;
     }
+    teamId = currentTeamId
     try {
       const response = await fetch(`${endpoint}/${selectedObjective}`, {
         method: "DELETE",
@@ -556,9 +567,10 @@ function Okr() {
   }
 
   useEffect(() => {
-    treatRoute();
+    treatRoute()
     fetchObjectives();
     fetchEmployees();
+    fetchTeams();
   }, []);
 
   return (
