@@ -913,7 +913,7 @@ function Okr() {
       <Dialog open={openDialogTask} onClose={handleDialogCloseTask}>
         <DialogTitle>{statusDialogTask} Tarefa</DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmitTask}>
+          <form onSubmit={handleSubmitTask(false)}>
             <TextField
               autoFocus
               margin="dense"
@@ -962,7 +962,7 @@ function Okr() {
         </DialogContent>
         <DialogActions>
           <Button disabled={loading} onClick={handleDialogTaskClose}>Cancelar</Button>
-          <Button type="submit" variant="contained" disabled={loading} onClick={handleSubmitTask}>
+          <Button type="submit" variant="contained" disabled={loading} onClick={handleSubmitTask(false)}>
             {!!loading ? 'Enviando...' : 'Salvar'}
           </Button>
         </DialogActions>
