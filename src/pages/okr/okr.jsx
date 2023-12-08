@@ -15,7 +15,7 @@ function Okr() {
   let { team_id: teamId } = useParams();
 
   const navigate = useNavigate();
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = 'https://vydra-back.onrender.com';
   const endpoint = `${BASE_URL}/objectives`;
   const endpointTeams = `${BASE_URL}/teams`;
   const headers = {
@@ -149,7 +149,6 @@ function Okr() {
     setFormDataTask(options)
   } 
   const handleDialogObjectiveEditOpen = (objective) => {
-    objective.id = objective.id
     objective.prevision_date = formatDate(objective.prevision_date)
     objective.name = objective.objective_name
     objective.description = objective.objective_description
