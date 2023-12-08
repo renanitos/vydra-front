@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Navbar from "../../components/navbar/navbar.jsx";
-import ChatBox from "../../components/ChatBox/ChatBox.jsx";
 import jwtDecode from "jwt-decode";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
+import ChatBox from "../../components/ChatBox/ChatBox.jsx";
+import Navbar from "../../components/navbar/navbar.jsx";
 
 function Analytics() {
   const [data, setData] = useState(null);
@@ -96,7 +96,6 @@ function Analytics() {
       <iframe title="dashboard-exemplo" width="1024" height="612" src="https://app.powerbi.com/view?r=eyJrIjoiYjQxODQzNTgtY2Q4Ny00OWU4LTljMjItM2ZmMWZmYjJlMzAwIiwidCI6ImNmNzJlMmJkLTdhMmItNDc4My1iZGViLTM5ZDU3YjA3Zjc2ZiIsImMiOjR9&pageName=ReportSection" frameborder="0" allowFullScreen="true"></iframe>
       <ChatBox />
       <iframe background-color="#F8F9FD" title="dashboard-exemplo" width="100%" height="1024" src="https://app.powerbi.com/view?r=eyJrIjoiYjQxODQzNTgtY2Q4Ny00OWU4LTljMjItM2ZmMWZmYjJlMzAwIiwidCI6ImNmNzJlMmJkLTdhMmItNDc4My1iZGViLTM5ZDU3YjA3Zjc2ZiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
-      </div>
     </div>
   );
 }
