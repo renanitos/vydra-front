@@ -17,9 +17,9 @@ const ChatBox = () => {
       </div>
       {isExpanded && (
         <iframe
-          src="https://webchat.botframework.com/embed/tcc-chat-bot?s=24Pzf1orjYE._2Rne-VzQi1wS2I3whI5Vgy2U1E3UKUbdtamiSnUS00"
+          src="https://webchat.botframework.com/embed/vydra-bot?s=rcqQQTq-iEo.qreNH_uPHVKR0hmcNsRwJ0C7Bi3z5aohxnz4hsGLhMY"
           style={{ minWidth: "400px", width: "100%", minHeight: "500px" }}
-          title="ChatBot"
+          title="VydraBot"
         ></iframe>
       )}
     </div>
